@@ -1,0 +1,18 @@
+{
+  "name": "1.-to-do-list",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "jest": {
+  "setupFiles": ["./setupTests.js"]
+  },
+  "author": "Duygu kara",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-localstorage-mock": "^2.4.26"
+  }
+}

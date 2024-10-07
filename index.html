@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="head-flex head changed-flex">
+        <h1>To-Do List 🌟 </h1>
+        <img draggable ="false" class="add-button" src="./assests/svgs/plus-square.svg" alt="plus shape for add button">
+    </div>
+
+    <h2 class="add-new-task">Add New Task!</h2>
+    <div class="task-grid-container changed-grid ">
+        <template>
+                <div class="item drop-target">
+                <div class="head-flex">
+                    <div class="drag-element" draggable="true"><img src="./assests/svgs/list.svg" alt="three lines"></div> 
+                    <div class="dropdown"><img draggable ="false" src="./assests/svgs/three-dots.svg" alt="three dots">
+                        <div class="dropdown-content">
+                            <ul>
+                                <li id="deleteTask">Delete</li><hr/>
+                                <li id="editTask">Edit</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="content">
+                    <h2>Başlık 1</h2>
+                    <p>İçerik 1</p>
+                </div>
+                <div class="position-bottom-svgs">
+                        <div class="circle-grid">
+                            <img draggable ="false" src="./assests/svgs/circle-fill-red.svg" alt="red circle">
+                            <img draggable ="false" src="./assests/svgs/circle-fill-yellow.svg" alt="yellow circle">
+                            <img draggable ="false" src="./assests/svgs/circle-fill-green.svg" alt="green circle">
+                        </div>
+                    <div class="check"><img draggable ="false" src="./assests/svgs/app.svg" alt="empty square"></div>
+                </div> 
+            </div>       
+        </template>   
+    </div>
+
+    <!---Task Modal --->
+    <div class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Create New Task</p>
+            <div class="title">
+                <label for="task-title">Task Title</label>
+                <input type="text" id="task-title" name="task-title" required minlength="3" maxlength="25" size="30" />  
+            </div>
+
+            <div class="t-content">
+                <label for="task-content">Task Content</label>
+                <textarea id="task-content" name="task-content" rows="5" cols="45" minlength="3" maxlength="125"></textarea>
+            </div>
+
+            <button type="button" class="add-task-button">Add Task</button>
+        </div>
+    </div>
+
+    <!--Edit Modal-->
+    <div class="edit-modal">
+        <div class="edit-modal-content">
+                <span class="close">&times;</span>
+                <p>Edit Task</p>
+            <div class="title">
+                <label for="task-title">Task Title</label>
+                <input type="text" id="task-title" name="task-title" required minlength="3" maxlength="25" size="30"/>  
+            </div>
+
+            <div class="t-content">
+                <label for="task-content">Task Content</label>
+                <textarea id="task-content" name="task-content" rows="5" cols="45" minlength="3" maxlength="125"></textarea>
+            </div>
+
+            <button type="button" class="edit-task-button">Edit Task</button>
+        </div>
+    </div>
+    <footer>© 2024 Duygu Kara</footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>

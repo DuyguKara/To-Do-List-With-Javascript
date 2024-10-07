@@ -1,0 +1,339 @@
+html {
+    background-color: #F6F6F6;
+}
+
+h1 {
+    font-family: "Pacifico", "cursive";
+    font-weight: 400;
+    font-style: normal;
+}
+
+.content {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.content p {
+    padding-bottom: 20px;
+}
+
+.head-flex {
+    display: flex;
+    justify-content: space-between;
+}
+.head {
+    padding: 20px 60px 20px 60px;
+}
+
+.task-grid-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    padding: 20px 60px 20px 60px;
+}
+
+.item {
+    background-color: #FFE2E2;
+    border-radius: 8px;
+    text-align: center;
+    padding: 3% 3% 3% 3%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    word-wrap: break-word;
+    position: relative;
+}
+.position-bottom-svgs {
+    position: absolute;
+    bottom: 5px;
+    display: flex;
+    justify-content: space-between; 
+    width: 95%;
+}
+.check {
+    text-align: end;
+    cursor: pointer;
+}
+.circle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 13px;
+}
+
+@media screen and (max-width: 576px) {
+    .changed-grid {
+        grid-template-columns: 1fr;
+    }
+    .changed-flex {
+        flex-direction: column;
+        text-align: center;
+    }
+    .changed-flex > img {
+        height: 35px;
+    }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #F6F6F680;
+    padding-top: 150px;
+    z-index: 2;
+}
+
+.modal-content, .edit-modal-content {
+    background-color: #8785A2;
+    margin: auto;
+    padding: 20px;
+    max-width: 30%;
+    border: 3px solid #aaaaaa;
+    font-family: "Roboto", system-ui;
+    font-weight: 500;
+    font-style: italic;
+    color: #353535;
+    text-align: center;
+    border-radius: 8px;
+}
+
+@media screen and (max-width: 1240px) {
+
+    textarea, .title > input {
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 740px) {
+
+    .modal-content, .edit-modal-content {
+        max-width: 50%;
+        }
+}
+
+.close {
+    color: #504f4f;
+    font-size: 28px;
+    font-weight: bold;
+    float: right;
+}
+
+.close:hover {
+    color: #000;
+    cursor: pointer;
+}
+.head img {
+    cursor: pointer;
+}
+
+.title, .t-content {
+    padding: 10px 0 15px 0;
+}
+
+label {
+    display: block;
+}
+
+.modal-content > p, .edit-modal-content > p {
+    font-size: 30px;
+    color: #FFC7C7;
+    text-shadow: 2px 2px #353535;
+    font-family: "Pacifico", "cursive";
+    font-weight: 400;
+    font-style: normal;
+}
+
+textarea {
+    resize: none;
+    padding: 15px;
+    outline: none;
+    border-radius: 8px;
+    border-style: none;
+    box-shadow: 4px 4px 4px #353535;
+}
+
+.title > input {
+    outline: none;
+    border-radius: 8px;
+    border-style: none;
+    padding: 5px;
+    box-shadow: 4px 4px 4px #353535;
+}
+
+.add-task-button {
+    font-family: "Roboto", system-ui;
+    font-weight: 500;
+    font-style: italic;
+    padding: 10px;
+    box-shadow: 4px 4px 4px #353535;
+    background-color: #FFC7C7;
+    border-radius: 8px;
+    border-style: none;
+    color: #353535;
+    cursor: pointer;
+    height: 40px;
+    padding: 10px 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.add-task-button:hover{
+  background-color: #F082AC;
+}
+
+template {
+    display: none;
+}
+
+.dropdown > img {
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 90px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.dropdown-content > ul{
+    list-style: none;
+    color: black;
+    padding: 0px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content > ul > li {
+    padding: 8px 0px;
+    font-family: "Roboto", system-ui;
+    font-weight: 500;
+    font-style: normal;
+    font-size: small;
+    cursor: pointer;
+}
+
+.dropdown-content > ul > li:hover{
+    background-color: #f3b5b5;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.2);;
+}
+
+.tDotsHover {
+    background-color: #FFC7C7;
+    border-radius: 5px;
+    padding: 0px 7px;
+}
+
+.edit-modal {
+    background-color: #F6F6F680;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: none;
+}
+
+.edit-modal-content {
+    background-color: #F082AC;
+    margin: auto;
+    position: relative;
+    top: 150px;
+    padding: 20px;
+    border-radius: 8px;
+    border: 2px solid #f3b5b5;
+}
+
+.edit-task-button {
+    font-family: "Roboto", system-ui;
+    font-weight: 500;
+    font-style: italic;
+    padding: 10px;
+    box-shadow: 4px 4px 4px #353535;
+    background-color: #FFC7C7;
+    border-radius: 8px;
+    border-style: none;
+    color: #353535;
+    cursor: pointer;
+    height: 40px;
+    padding: 10px 16px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.edit-task-button:hover{
+    background-color: #e2dddd;
+  }
+
+.edit-modal-content > p {
+    color: #e2dddd;
+}
+
+.done-task {
+    text-decoration: line-through;
+    color: #00000070;
+}
+
+.circle-grid img {
+    cursor: pointer;
+}
+
+.red-frame {
+    border: 5px solid #b8001fb2;
+}
+
+.yellow-frame {
+    border: 5px solid #F9E400b2;
+}
+
+.green-frame {
+    border: 5px solid #6EC207b2;
+}
+
+footer {
+    position: fixed;
+    bottom: 9px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: smaller;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.drag-element {
+    cursor: grab;
+}
+
+.dragging {
+    opacity: 0.5;
+}
+
+.drag-frame {
+    border: 3px solid #8785A2;
+}
+
+.add-new-task{
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    font-style: normal; 
+    font-size: xx-large;
+    text-align: center;
+    margin-top: 100px;
+    border: 8px dashed #F082AC;
+    padding: 80px;
+    opacity: 0.8;
+    display: block;
+}
