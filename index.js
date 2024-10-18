@@ -16,6 +16,10 @@ $(".add-task-button").click(function(){
     var titleValue = $(".modal #task-title").val();
     var contentValue = $(".modal #task-content").val();
     createTask(titleValue, contentValue);
+
+    // task oluşturulduktan sonra input boxlarda kalan değerleri temizliyorum ki bir sonraki görev oluşturulurken eski yazılanlar gelmesin.
+    $(".modal #task-title").val('');
+    $(".modal #task-content").val('');
 });
 
 //counter fonksiyonu
@@ -113,8 +117,16 @@ $('.task-grid-container').on('mouseout', '.dropdown > img', function(){
 /* 3 nokta olan elemente tıklama gerçekleştiğinde tıklanan elementin child elementine dropdown-content sınıfına toggle özelliği
 veriyor böyle tıklanınca sınıf yoksa ekleniyor varsa çıkarılıyor. */
 
-$('.task-grid-container').on('click', '.dropdown', function(event){
-    $(this).children('.dropdown-content').toggle();
+$('.task-grid-container').on('click', '.dropdown', function(event) {
+    event.stopPropagation(); // Document'e tıklama olayını yayılmasını engelleme bunu koymazsam documentteki click olayı da tetiklenir aynı anda.
+    $(this).children('.dropdown-content').css('display', 'block');
+});
+
+$(document).click(function(event) {
+    // Eğer tıklanan yer dropdown-content değilse, tüm dropdown'ları kapatıyor
+    if (!$(event.target).closest('.dropdown').length) {
+        $('.dropdown-content').css('display', 'none');
+    }
 });
 
 // local storage için string olarak tuttuğum html kodlarını dom'a çevirdiğim fonksiyon.
@@ -174,6 +186,16 @@ bunu da currentItemId değişkenine koyuyoruz.*/
 $('.task-grid-container').on('click', '#editTask', function(){
     $('.edit-modal').css("display", "block");
     currentItemId ="#" + $(this).closest('.item').attr('id');
+
+
+    // Mevcut task başlığı ve içeriğini al
+    const taskElement = document.querySelector(currentItemId);
+    const titleValue = taskElement.querySelector('.content h2').textContent; // Mevcut h2 değeri
+    const contentValue = taskElement.querySelector('.content p').textContent; // Mevcut p değeri
+
+    // Input kutularına mevcut değerleri yerleştirerek her modal açıldığında var olan içeriği input boxlara yazıyor.
+    $('.edit-modal #task-title').val(titleValue);
+    $('.edit-modal #task-content').val(contentValue);
 }); 
 
 /* açılan modaldaki düzenle butonuna basıldığında kullanıcının input boxlara girdiği verilerin değerlerini alıyoruz.
@@ -181,6 +203,8 @@ ve edit task fonksiyonunu çağırıyoruz. çağırırken aldığımız id ve in
 $('.edit-task-button').click(function(){
     const titleValue = $('.edit-modal #task-title').val();
     const contentValue = $('.edit-modal #task-content').val();
+
+    // Input kutularına mevcut değerleri yerleştiriyorum.
     editTask(currentItemId, titleValue, contentValue);
 }); 
 
@@ -234,51 +258,50 @@ belirli css özellikleri çıkacak kaldırılmak istenirse de kaldırılacak.
     window.onload();
   });
 
-  //renk çerçevesi ekleme çıkarma ve çerçeveleri üst üste bindirmesin diye fonksiyon
 
-  /* 3 renk olan çerçevelerden örneğin red olana tıklandıysa eğer varsa sarı ve yeşil çerçeveyi ekeleyen sınıflar kaldırılıyor
-  böylece üst üste tıklandığında renkleri üst üste bindirmesi önleniyor. 
-  red' tıklandı sonra yellow tıklandı en son yellow  görecek kullanıcı yellow'a basıp kapatmak istediğinde altta red görmeyecek. */
-  function addFrame (elementId, clickedFrame, removeFrame1, removeFrame2){
-    //$(element).toggleClass(clickedFrame); 
-    /* $(element).toggleClass('yellow-frame'); */
+  //önem derecesine göre renk çerçevesi ekleme çıkarma.
 
-    // console.log(removeFrame1); ---> yellow-frame
-    // console.log(removeFrame1, removeFrame2); ---> yellow-frame green-frame
-   /*  if($(element).hasClass('yellow-frame') || $(element).hasClass('green-frame')){
-        $(element).removeClass('yellow-frame green-frame');
-    } */
-    const savedData = localStorage.getItem("tasks");
-    const domData = stringToDom(savedData);
-    var element = domData.querySelector(elementId);
-    $(element).toggleClass(clickedFrame); 
-    if($(element).hasClass(removeFrame1) || $(element).hasClass(removeFrame2)){
-        $(element).removeClass(removeFrame1, removeFrame2);
+  /* data özelliğinde border tutuyoruz tıklama gerçekleştiğinde css olarak border ekliyoruz ve bunu kaydediyoruz eğer vermek istediğimiz renk
+  datada zaten varsa boş olarak değiştirerek çerçevenin kalkması sağlanıyor. hangi renge tıklandıysa o rengin border özellğini kaydediyoruz. böylece 
+  renkten renge geçişte üst üste binmiyor en son hangi renkteyse tıklandığında da kaldırılıyor. */
+  $('.task-grid-container').on('click', '.circle-grid img:first-child', function() {
+    const item = $(this).closest('.item');
+    const currentBorder = item.data('border');
+
+    if (currentBorder === 'b8001fb2') {
+        item.css('border', '');
+        item.data('border', null); // Border kaldırıldığında data özelliğini null yap
+    } else {
+        item.css('border', '5px solid #b8001fb2');
+        item.data('border', 'b8001fb2'); // Yeni border değerini data özelliğinde sakla
     }
-    localStorage.setItem("tasks", domData.documentElement.outerHTML);
-    window.onload();
-  }
+});
 
-  /* kırmızı çerçeve veren elemente tıklandığında o elementin idsi bulunuyor ve addFrame fonksiyonu çağırılıyor.
-  fonksiyona tıklanan elementin id değeri hangi renge tıklandığı ve hangi renkler varsa kaldırılması gerektiği parametreleri yollanıyor. */
-  $('.task-grid-container').on('click', '.circle-grid img:first-child', function(){
-    const elementId = "#" + $(this).closest('.item').attr('id');
-    addFrame(elementId, 'red-frame', 'yellow-frame', 'green-frame');
-  });
+$('.task-grid-container').on('click', '.circle-grid img:nth-child(2)', function() {
+    const item = $(this).closest('.item');
+    const currentBorder = item.data('border');
 
-  /* yellow çerçeve veren elemente tıklandığında o elementin idsi bulunuyor ve addFrame fonksiyonu çağırılıyor.
-  fonksiyona tıklanan elementin id değeri hangi renge tıklandığı ve hangi renkler varsa kaldırılması gerektiği parametreleri yollanıyor. */
-  $('.task-grid-container').on('click', '.circle-grid img:nth-child(2)', function(){
-    const elementId = "#" + $(this).closest('.item').attr('id');
-    addFrame(elementId, 'yellow-frame', 'red-frame', 'green-frame');
-  });
+    if (currentBorder === 'F9E400b2') {
+        item.css('border', '');
+        item.data('border', null);
+    } else {
+        item.css('border', '5px solid #F9E400b2');
+        item.data('border', 'F9E400b2');
+    }
+});
 
-  /* green çerçeve veren elemente tıklandığında o elementin idsi bulunuyor ve addFrame fonksiyonu çağırılıyor.
-  fonksiyona tıklanan elementin id değeri hangi renge tıklandığı ve hangi renkler varsa kaldırılması gerektiği parametreleri yollanıyor. */
-  $('.task-grid-container').on('click', '.circle-grid img:nth-child(3)', function(){
-    const elementId = "#" + $(this).closest('.item').attr('id');
-    addFrame(elementId, 'green-frame', 'yellow-frame', 'red-frame');
-  });
+$('.task-grid-container').on('click', '.circle-grid img:nth-child(3)', function() {
+    const item = $(this).closest('.item');
+    const currentBorder = item.data('border');
+
+    if (currentBorder === '6EC207b2') {
+        item.css('border', '');
+        item.data('border', null);
+    } else {
+        item.css('border', '5px solid #6EC207b2');
+        item.data('border', '6EC207b2');
+    }
+});
 
 //sürüklenecek elemente html tarafında draggable özelliği true verilmeli.
 /* sürükleme yapılacak elemente dragstart olayı başlatılıyor o elementin idsi alınıyor ve o id ile item contenti alınıyor.
@@ -287,19 +310,20 @@ o elemente css özellikleri veren dagging sınıfı ekleniyor.
 ve aynı zamanda id değeri de transfer edilmek üzere set ediliyor.*/
 $('.task-grid-container').on('dragstart', '.drag-element', function(event){
     const elementId = "#" + $(this).closest('.item').attr('id');
-    const dragedElementHtmlContent = $(this).closest('.item').find('.content').html();
-    event.originalEvent.dataTransfer.setData("Text/html", dragedElementHtmlContent);
-    $(elementId).addClass('dragging');
+
+    const draggedElementHtmlContent = $(this).closest('.item').prop('outerHTML');
+    event.originalEvent.dataTransfer.setData("Text/html", draggedElementHtmlContent);
+    //$(elementId).addClass('dragging');
     event.originalEvent.dataTransfer.setData("Text/plain", elementId);
 
 });
 
 /* sürükleme bittiğinde sürüklemesi biten elementten dragging sınıfı kaldırılıyor. */
 
-$('.task-grid-container').on('dragend', '.drag-element', function(){
+/* $('.task-grid-container').on('dragend', '.drag-element', function(){
     const elementId = "#" + $(this).closest('.item').attr('id');
     $(elementId).removeClass('dragging');
-});
+}); */
 
 // drop ayarlamaları-------------------------------------------------------------
 
@@ -329,43 +353,46 @@ $('.task-grid-container').on("dragleave", function(event) {
 
 /* içerik droplandığında öncelikle sayfanın default özelliğini kaldırıyoruz yoksa drop yapmamıza izin vermez. eğer sürükleme
 yapılacak alandaysak drop gerçekleştiğinde dragenterda eklenen css özelliğini kaldırıyoruz. sürüklenen öğenin ve droplanacak elementin
-id değerlerini ve contentlerini alıyoruz bu iki item'ın contentlerini değiştiriyoruz.
+id değerlerini ve item sınıfına sahip elementin htmlini alıyoruz bu iki item'ın contentlerini değiştiriyoruz.
 depolamayı da ona göre güncelliyoruz.*/
 $('.task-grid-container').on("drop", function(event) {
     event.preventDefault();
 
     if ($(event.target).closest('.item').hasClass('drop-target')) {
         $(event.target).removeClass('drag-frame');
-        
-        // Sürüklenen öğenin içeriğini ve ID'sini al
-        const draggedElementHtmlContent = event.originalEvent.dataTransfer.getData("text/html");
+
+        // Sürüklenen öğenin HTML içeriğini ve ID'sini al
         const draggedElementId = event.originalEvent.dataTransfer.getData("text/plain");
-        
-        // Bırakılan öğenin içeriğini ve ID'sini al
+        const draggedElement = $(draggedElementId); // Sürüklenen öğe
+
+
+        // Bırakılan öğeyi al
         const droppedElement = $(event.target).closest('.item');
-        const droppedElementHtmlContent = droppedElement.find('.content').html();
-        const droppedElementId = droppedElement.attr('id');
+
+        // Her iki öğenin outerHTML'ini al
+        const draggedElementHtmlContent = draggedElement.prop('outerHTML');
+        const droppedElementHtmlContent = droppedElement.prop('outerHTML');
+
+        // Bırakılan öğenin HTML içeriğini sürüklenen öğeye ata
+        draggedElement.replaceWith(droppedElementHtmlContent);
         
-        // Bırakılan öğeye sürüklenen öğenin içeriğini koy
-        droppedElement.find('.content').html(draggedElementHtmlContent);
-        
-        // Sürüklenen öğeye bırakılan öğenin içeriğini koy
-        $(draggedElementId).find('.content').html(droppedElementHtmlContent);
+        // Sürüklenen öğenin HTML içeriğini bırakılan öğeye ata
+        droppedElement.replaceWith(draggedElementHtmlContent);
 
         // LocalStorage'daki veriyi güncelle
         const savedData = localStorage.getItem("tasks");
         const dom = stringToDom(savedData);
 
-        // Dom üzerinde güncellemeleri yap
+        // DOM üzerinde güncellemeleri yap
         const domDraggedElement = dom.querySelector(`#${draggedElementId.substring(1)}`);
-        const domDroppedElement = dom.querySelector(`#${droppedElementId}`);
+        const domDroppedElement = dom.querySelector(`#${droppedElement.attr('id')}`);
 
         if (domDraggedElement && domDroppedElement) {
-            domDraggedElement.querySelector('.content').innerHTML = droppedElementHtmlContent;
-            domDroppedElement.querySelector('.content').innerHTML = draggedElementHtmlContent;
+            domDroppedElement.outerHTML = draggedElementHtmlContent; // Bırakılan öğenin içeriğini güncelle
+            domDraggedElement.outerHTML = droppedElementHtmlContent; // Sürüklenen öğenin içeriğini güncelle
         }
 
         // Güncellenmiş DOM'u localStorage'a kaydet
         localStorage.setItem("tasks", dom.documentElement.outerHTML);
     }
-  });
+});  
