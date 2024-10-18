@@ -317,12 +317,13 @@ footer {
     cursor: grab;
 }
 
-.dragging {
+/* .dragging {
     opacity: 0.5;
-}
+} */
 
 .drag-frame {
     border: 3px solid #8785A2;
+    opacity: 0.5;
 }
 
 .add-new-task{
